@@ -1,0 +1,28 @@
+--- nftables-0.2/configure.ac.orig	2014-04-14 13:16:24.000000000 +0200
++++ nftables-0.2/configure.ac	2014-04-19 14:07:59.475893678 +0200
+@@ -25,20 +25,13 @@
+ AC_PROG_INSTALL
+ AC_PROG_SED
+ 
+-AC_CHECK_PROG(CONFIG_MAN1, [docbook2x-man], [y], [n])
+-if test "$CONFIG_MAN1" == "y"
++AC_CHECK_PROG(DB2MAN, [docbook2x-man db2x_docbook2man], [n])
++if test "$DB2MAN" = "n"
+ then
+-	CONFIG_MAN=y
+-	DB2MAN=docbook2x-man
++	CONFIG_MAN=n
++	AC_MSG_WARN([docbookx2-man/db2x_docbook2man not found, no manpages will be built])
+ else
+-	AC_CHECK_PROG(CONFIG_MAN2, [db2x_docbook2man], [y], [n])
+-	if test "$CONFIG_MAN2" == "y"
+-	then
+-		CONFIG_MAN=y
+-		DB2MAN=db2x_docbook2man
+-	else
+-		AC_MSG_WARN([docbookx2-man/db2x_docbook2man not found, no manpages will be built])
+-	fi
++	CONFIG_MAN=y
+ fi
+ AC_SUBST(CONFIG_MAN)
+ AC_SUBST(DB2MAN)
