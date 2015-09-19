@@ -1,12 +1,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.4
+Version:	0.5
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://www.netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	09b686c489ff10db670ca60dbed7ff43
+# Source0-md5:	94bfe1c54bcb9f6ed974835f2fca8069
 URL:		http://www.netfilter.org/projects/nftables/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1.6
@@ -16,10 +16,11 @@ BuildRequires:	docbook2X
 BuildRequires:	flex
 BuildRequires:	gmp-devel
 BuildRequires:	libmnl-devel >= 1.0.3
-BuildRequires:	libnftnl-devel >= 1.0.2
+BuildRequires:	libnftnl-devel >= 1.0.5
+BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 Requires:	libmnl >= 1.0.3
-Requires:	libnftnl >= 1.0.2
+Requires:	libnftnl >= 1.0.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
