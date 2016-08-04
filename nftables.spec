@@ -1,12 +1,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.5
+Version:	0.6
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://www.netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	94bfe1c54bcb9f6ed974835f2fca8069
+# Source0-md5:	fd320e35fdf14b7be795492189b13dae
 URL:		http://www.netfilter.org/projects/nftables/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1.6
