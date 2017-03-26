@@ -1,12 +1,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.6
-Release:	2
+Version:	0.7
+Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	http://www.netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	fd320e35fdf14b7be795492189b13dae
+# Source0-md5:	4c005e76a15a029afaba71d7db21d065
 URL:		http://www.netfilter.org/projects/nftables/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1.6
@@ -15,12 +15,14 @@ BuildRequires:	dblatex
 BuildRequires:	docbook2X
 BuildRequires:	flex
 BuildRequires:	gmp-devel
+BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	libmnl-devel >= 1.0.3
-BuildRequires:	libnftnl-devel >= 1.0.5
+BuildRequires:	libnftnl-devel >= 1.0.7
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
+Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.3
-Requires:	libnftnl >= 1.0.5
+Requires:	libnftnl >= 1.0.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -51,7 +53,8 @@ użytkownika oraz podsystem logowania.
 %{__automake}
 %configure \
 	DOCBOOK2X_MAN=/usr/bin/docbook2X2man \
-	--disable-silent-rules
+	--disable-silent-rules \
+	--with-xtables
 
 %{__make}
 
@@ -60,9 +63,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
-
-# man page in groff format is sufficient
-%{__rm} $RPM_BUILD_ROOT%{_docdir}/nftables/pdf/nft.pdf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
