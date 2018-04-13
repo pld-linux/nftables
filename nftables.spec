@@ -1,13 +1,13 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.8
+Version:	0.8.3
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	http://www.netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	9fe666f6281e3e377e2e818152336b25
-URL:		http://www.netfilter.org/projects/nftables/
+Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
+# Source0-md5:	a604501c10a302fa417410b16f293d2c
+URL:		https://netfilter.org/projects/nftables/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1.6
 BuildRequires:	bison
@@ -17,12 +17,13 @@ BuildRequires:	flex
 BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	libmnl-devel >= 1.0.3
-BuildRequires:	libnftnl-devel >= 1.0.8
+BuildRequires:	libnftnl-devel >= 1.0.9
+BuildRequires:	libtool
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.3
-Requires:	libnftnl >= 1.0.8
+Requires:	libnftnl >= 1.0.9
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -47,6 +48,7 @@ użytkownika oraz podsystem logowania.
 %setup -q
 
 %build
+%{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
 %{__autoheader}
@@ -69,18 +71,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc TODO
+%doc TODO files/examples
 %attr(755,root,root) %{_sbindir}/nft
-%dir %{_sysconfdir}/nftables
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/arp-filter
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/bridge-filter
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/inet-filter
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-filter
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-mangle
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-nat
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-raw
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-filter
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-mangle
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-nat
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-raw
 %{_mandir}/man8/nft.8*
