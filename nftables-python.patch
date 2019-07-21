@@ -1,0 +1,11 @@
+--- nftables-0.9.1/py/Makefile.am.orig	2019-06-24 18:16:08.518253860 +0200
++++ nftables-0.9.1/py/Makefile.am	2019-07-21 18:47:12.550007345 +0200
+@@ -9,7 +9,7 @@
+ install-exec-local:
+ 	cd $(srcdir) && \
+ 		$(PYTHON_BIN) setup.py build --build-base $(abs_builddir) \
+-		install --prefix $(DESTDIR)$(prefix)
++		install --skip-build --root $(DESTDIR) --prefix $(prefix) --optimize=2
+ 
+ uninstall-local:
+ 	rm -rf $(DESTDIR)$(prefix)/lib*/python*/site-packages/nftables

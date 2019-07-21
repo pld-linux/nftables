@@ -1,12 +1,13 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.9.0
-Release:	2
+Version:	0.9.1
+Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	d4dcb61df80aa544b2e142e91d937635
+# Source0-md5:	e2facbcad6c5d9bd87a0bf5081a31522
+Patch0:		%{name}-python.patch
 URL:		https://netfilter.org/projects/nftables/
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1.6
@@ -21,7 +22,10 @@ BuildRequires:	libmnl-devel >= 1.0.3
 BuildRequires:	libnftnl-devel >= 1.1.1
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
+BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	readline-devel
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.219
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.3
 Requires:	libnftnl >= 1.1.1
@@ -69,8 +73,21 @@ Static nftables library.
 %description static -l pl.UTF-8
 Statyczna biblioteka nftables.
 
+%package -n python-nftables
+Summary:	Python bindings for libnftables library
+Summary(pl.UTF-8):	Wiązania Pythona do biblioteki libnftables
+Group:		Libraries/Python
+Requires:	%{name} = %{version}-%{release}
+
+%description -n python-nftables
+Python bindings for libnftables library.
+
+%description -n python-nftables -l pl.UTF-8
+Wiązania Pythona do biblioteki libnftables.
+
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -95,6 +112,8 @@ rm -rf $RPM_BUILD_ROOT
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libnftables.la
 
+%py_postclean
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -117,8 +136,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-mangle.nft
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-nat.nft
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-raw.nft
+%dir %{_sysconfdir}/nftables/osf
+%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/osf/pf.os
 %attr(755,root,root) %{_libdir}/libnftables.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnftables.so.0
+%attr(755,root,root) %ghost %{_libdir}/libnftables.so.1
+%{_mandir}/man5/libnftables-json.5*
 %{_mandir}/man8/nft.8*
 
 %files devel
@@ -126,7 +148,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libnftables.so
 %{_includedir}/nftables
 %{_pkgconfigdir}/libnftables.pc
+%{_mandir}/man3/libnftables.3*
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libnftables.a
+
+%files -n python-nftables
+%defattr(644,root,root,755)
+%dir %{py_sitedir}/nftables
+%{py_sitedir}/nftables/*.py[co]
+%{py_sitedir}/nftables/schema.json
+%{py_sitedir}/nftables-0.1-py*.egg-info
