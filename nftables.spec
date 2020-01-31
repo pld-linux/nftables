@@ -1,19 +1,18 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.9.2
-Release:	2
+Version:	0.9.3
+Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	dfe130724d7c998eb26b56447e932899
+# Source0-md5:	9913b2b46864394d41916b74638e0875
 Patch0:		%{name}-python.patch
 URL:		https://netfilter.org/projects/nftables/
+BuildRequires:	asciidoc
 BuildRequires:	autoconf >= 2.61
 BuildRequires:	automake >= 1.6
 BuildRequires:	bison
-BuildRequires:	dblatex
-BuildRequires:	docbook2X
 BuildRequires:	flex
 BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
@@ -96,7 +95,6 @@ Wiązania Pythona do biblioteki libnftables.
 %{__autoheader}
 %{__automake}
 %configure \
-	DOCBOOK2X_MAN=/usr/bin/docbook2X2man \
 	--disable-silent-rules \
 	--with-json \
 	--with-xtables
