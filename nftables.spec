@@ -1,12 +1,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.9.3
+Version:	0.9.4
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	9913b2b46864394d41916b74638e0875
+# Source0-md5:	fdfd51a1083fb054a487b5159b1ed5cd
 Patch0:		%{name}-python.patch
 URL:		https://netfilter.org/projects/nftables/
 BuildRequires:	asciidoc
@@ -18,7 +18,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	jansson-devel
 BuildRequires:	libmnl-devel >= 1.0.3
-BuildRequires:	libnftnl-devel >= 1.1.4
+BuildRequires:	libnftnl-devel >= 1.1.6
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules >= 1:2.5
@@ -27,7 +27,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.3
-Requires:	libnftnl >= 1.1.4
+Requires:	libnftnl >= 1.1.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -140,6 +140,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/osf/pf.os
 %attr(755,root,root) %{_libdir}/libnftables.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnftables.so.1
+%doc %{_docdir}/nftables
 %{_mandir}/man5/libnftables-json.5*
 %{_mandir}/man8/nft.8*
 
