@@ -5,12 +5,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.9.6
+Version:	0.9.7
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	3214083f71c5b04a40762f59fa08cea0
+# Source0-md5:	72dcf97e712b337469e4d70281ba5075
 Source1:	%{name}.service
 Source2:	%{name}.conf
 Patch0:		%{name}-python.patch
@@ -24,7 +24,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	jansson-devel
 BuildRequires:	libmnl-devel >= 1.0.4
-BuildRequires:	libnftnl-devel >= 1.1.7
+BuildRequires:	libnftnl-devel >= 1.1.8
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules >= 1:2.5
@@ -33,7 +33,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.4
-Requires:	libnftnl >= 1.1.7
+Requires:	libnftnl >= 1.1.8
 %{?with_systemd:Requires:	systemd-units >= 38}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -111,20 +111,20 @@ Wiązania Pythona do biblioteki libnftables.
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_sysconfdir}/sysconfig,%{systemdunitdir}}
+install -d $RPM_BUILD_ROOT{/etc/sysconfig,%{systemdunitdir}}
 
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
 
-cp %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
-sed -i -e 's|@NFT@|%{_sbindir}/nft|' \
-	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
+cp %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/nftables
+%{__sed} -i -e 's|@NFT@|%{_sbindir}/nft|' \
+	$RPM_BUILD_ROOT/etc/sysconfig/nftables
 
 %if %{with systemd}
 cp %{SOURCE1} $RPM_BUILD_ROOT%{systemdunitdir}
-sed -i -e '{
+%{__sed} -i -e '{
 	s|@NFT@|%{_sbindir}/nft|
-	s|@CONF@|%{_sysconfdir}/sysconfig/%{name}|
+	s|@CONF@|/etc/sysconfig/nftables|
 }' \
 	$RPM_BUILD_ROOT%{systemdunitdir}/%{name}.service
 %endif
@@ -169,7 +169,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/netdev-ingress.nft
 %dir %{_sysconfdir}/nftables/osf
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/osf/pf.os
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sysconfig/%{name}
+%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/nftables
 %attr(755,root,root) %{_libdir}/libnftables.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnftables.so.1
 %doc %{_docdir}/nftables
