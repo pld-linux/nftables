@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	systemd		# without systemd unit
+
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
@@ -7,6 +11,8 @@ License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
 # Source0-md5:	3214083f71c5b04a40762f59fa08cea0
+Source1:	%{name}.service
+Source2:	%{name}.conf
 Patch0:		%{name}-python.patch
 URL:		https://netfilter.org/projects/nftables/
 BuildRequires:	asciidoc
@@ -28,6 +34,7 @@ BuildRequires:	rpmbuild(macros) >= 1.219
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.4
 Requires:	libnftnl >= 1.1.7
+%{?with_systemd:Requires:	systemd-units >= 38}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -104,8 +111,23 @@ Wiązania Pythona do biblioteki libnftables.
 %install
 rm -rf $RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/sysconfig,%{systemdunitdir}}
+
 %{__make} install \
         DESTDIR=$RPM_BUILD_ROOT
+
+cp %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
+sed -i -e 's|@NFT@|%{_sbindir}/nft|' \
+	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
+
+%if %{with systemd}
+cp %{SOURCE1} $RPM_BUILD_ROOT%{systemdunitdir}
+sed -i -e '{
+	s|@NFT@|%{_sbindir}/nft|
+	s|@CONF@|%{_sysconfdir}/sysconfig/%{name}|
+}' \
+	$RPM_BUILD_ROOT%{systemdunitdir}/%{name}.service
+%endif
 
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libnftables.la
@@ -115,8 +137,17 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-p /sbin/ldconfig
-%postun	-p /sbin/ldconfig
+%post
+/sbin/ldconfig
+%{?with_systemd:%systemd_post %{name}.service}
+
+%preun
+%{?with_systemd:%systemd_preun %{name}.service}
+
+%postun
+/sbin/ldconfig
+%{?with_systemd:%systemd_reload}
+
 
 %files
 %defattr(644,root,root,755)
@@ -138,11 +169,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/netdev-ingress.nft
 %dir %{_sysconfdir}/nftables/osf
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/osf/pf.os
+%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/sysconfig/%{name}
 %attr(755,root,root) %{_libdir}/libnftables.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnftables.so.1
 %doc %{_docdir}/nftables
 %{_mandir}/man5/libnftables-json.5*
 %{_mandir}/man8/nft.8*
+%{?with_systemd:%{systemdunitdir}/%{name}.service}
 
 %files devel
 %defattr(644,root,root,755)

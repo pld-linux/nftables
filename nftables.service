@@ -1,0 +1,17 @@
+[Unit]
+Description=Netfilter Tables
+Documentation=man:nft(8)
+Wants=network-pre.target
+Before=network-pre.target
+
+[Service]
+Type=oneshot
+ProtectSystem=full
+ProtectHome=true
+ExecStart=@NFT@ -f @CONF@ 
+ExecReload=@NFT@ 'flush ruleset; include "@CONF@";'
+ExecStop=@NFT@ flush ruleset
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
