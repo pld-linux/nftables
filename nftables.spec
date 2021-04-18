@@ -30,7 +30,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	readline-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	rpmbuild(macros) >= 1.644
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.4
 Requires:	libnftnl >= 1.1.9
