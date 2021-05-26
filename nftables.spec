@@ -5,12 +5,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	0.9.8
-Release:	2
+Version:	0.9.9
+Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	77bf0bd43e65e92212fc73139a2e47fc
+# Source0-md5:	95bc3731a2e57d790482aac5bdd50c59
 Source1:	%{name}.service
 Source2:	%{name}.conf
 Patch0:		%{name}-python.patch
@@ -24,7 +24,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	jansson-devel
 BuildRequires:	libmnl-devel >= 1.0.4
-BuildRequires:	libnftnl-devel >= 1.1.9
+BuildRequires:	libnftnl-devel >= 1.2.0
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules >= 1:2.5
@@ -33,7 +33,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.644
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.4
-Requires:	libnftnl >= 1.1.9
+Requires:	libnftnl >= 1.2.0
 %{?with_systemd:Requires:	systemd-units >= 38}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -152,26 +152,26 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/nft
-%dir %{_sysconfdir}/nftables
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/all-in-one.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/arp-filter.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/bridge-filter.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/inet-filter.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/inet-nat.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-filter.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-mangle.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-nat.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv4-raw.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-filter.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-mangle.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-nat.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/ipv6-raw.nft
-%attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/netdev-ingress.nft
 %dir %{_sysconfdir}/nftables/osf
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/osf/pf.os
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/nftables
 %attr(755,root,root) %{_libdir}/libnftables.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnftables.so.1
+%dir %{_datadir}/nftables
+%attr(740,root,root) %{_datadir}/nftables/all-in-one.nft
+%attr(740,root,root) %{_datadir}/nftables/arp-filter.nft
+%attr(740,root,root) %{_datadir}/nftables/bridge-filter.nft
+%attr(740,root,root) %{_datadir}/nftables/inet-filter.nft
+%attr(740,root,root) %{_datadir}/nftables/inet-nat.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv4-filter.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv4-mangle.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv4-nat.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv4-raw.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv6-filter.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv6-mangle.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv6-nat.nft
+%attr(740,root,root) %{_datadir}/nftables/ipv6-raw.nft
+%attr(740,root,root) %{_datadir}/nftables/netdev-ingress.nft
 %doc %{_docdir}/nftables
 %{_mandir}/man5/libnftables-json.5*
 %{_mandir}/man8/nft.8*
