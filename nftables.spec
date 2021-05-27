@@ -6,7 +6,7 @@ Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
 Version:	0.9.9
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
@@ -152,6 +152,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/nft
+%dir %{_sysconfdir}/nftables
 %dir %{_sysconfdir}/nftables/osf
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/nftables/osf/pf.os
 %attr(740,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/nftables
