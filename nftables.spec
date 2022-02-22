@@ -5,15 +5,16 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	1.0.1
+Version:	1.0.2
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	e3cf7011ee1e8e123c962446262de7cc
+# Source0-md5:	d5ed55350ce3040104cdcabb6d97b25a
 Source1:	%{name}.service
 Source2:	%{name}.conf
 Patch0:		%{name}-python.patch
+Patch1:		build.patch
 URL:		https://netfilter.org/projects/nftables/
 BuildRequires:	asciidoc
 BuildRequires:	autoconf >= 2.61
@@ -94,6 +95,7 @@ Wiązania Pythona do biblioteki libnftables.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -103,6 +105,7 @@ Wiązania Pythona do biblioteki libnftables.
 %{__automake}
 %configure \
 	--disable-silent-rules \
+	--enable-static \
 	--with-cli=readline \
 	--with-json \
 	--with-xtables
