@@ -5,12 +5,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	1.0.4
+Version:	1.0.5
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	dcc3c263e00903037cf86d74477a9519
+# Source0-md5:	1e7aa3748cdd1621afb598178008af7c
 Source1:	%{name}.service
 Source2:	%{name}.conf
 Patch0:		%{name}-python.patch
@@ -24,7 +24,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	jansson-devel
 BuildRequires:	libmnl-devel >= 1.0.4
-BuildRequires:	libnftnl-devel >= 1.2.2
+BuildRequires:	libnftnl-devel >= 1.2.3
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules >= 1:2.5
@@ -33,7 +33,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.644
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.4
-Requires:	libnftnl >= 1.2.2
+Requires:	libnftnl >= 1.2.3
 %{?with_systemd:Requires:	systemd-units >= 38}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -149,7 +149,6 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 /sbin/ldconfig
 %{?with_systemd:%systemd_reload}
-
 
 %files
 %defattr(644,root,root,755)
