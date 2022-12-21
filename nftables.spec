@@ -5,12 +5,12 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	1.0.5
-Release:	2
+Version:	1.0.6
+Release:	1
 License:	GPL v2
 Group:		Applications/Networking
-Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.bz2
-# Source0-md5:	1e7aa3748cdd1621afb598178008af7c
+Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.xz
+# Source0-md5:	e1ab41882720b9045f743b9438022138
 Source1:	%{name}.service
 Source2:	%{name}.conf
 Patch0:		%{name}-python.patch
@@ -24,16 +24,18 @@ BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	jansson-devel
 BuildRequires:	libmnl-devel >= 1.0.4
-BuildRequires:	libnftnl-devel >= 1.2.3
+BuildRequires:	libnftnl-devel >= 1.2.4
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	readline-devel
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.644
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.4
-Requires:	libnftnl >= 1.2.3
+Requires:	libnftnl >= 1.2.4
 %{?with_systemd:Requires:	systemd-units >= 38}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
