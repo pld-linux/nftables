@@ -27,6 +27,7 @@ BuildRequires:	libmnl-devel >= 1.0.4
 BuildRequires:	libnftnl-devel >= 1.2.4
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
+BuildRequires:	python >= 1:2.5
 BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	readline-devel
 BuildRequires:	rpm-pythonprov
