@@ -5,15 +5,14 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	1.0.8
+Version:	1.0.9
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.xz
-# Source0-md5:	9ce9bc438cdff6125727aaf891b0592c
+# Source0-md5:	7f1112af32ff542d436693fa08f54a4e
 Source1:	%{name}.service
 Source2:	%{name}.conf
-Patch0:		%{name}-python.patch
 URL:		https://netfilter.org/projects/nftables/
 BuildRequires:	asciidoc
 BuildRequires:	autoconf >= 2.61
@@ -31,8 +30,9 @@ BuildRequires:	python >= 1:2.5
 BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	python-setuptools
 BuildRequires:	readline-devel
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.644
+BuildRequires:	rpmbuild(macros) >= 1.714
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 Requires:	iptables-libs >= 1.6.1
@@ -88,6 +88,7 @@ Summary:	Python bindings for libnftables library
 Summary(pl.UTF-8):	Wiązania Pythona do biblioteki libnftables
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
+BuildArch:	noarch
 
 %description -n python-nftables
 Python bindings for libnftables library.
@@ -97,7 +98,6 @@ Wiązania Pythona do biblioteki libnftables.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -113,6 +113,9 @@ Wiązania Pythona do biblioteki libnftables.
 	--with-xtables
 
 %{__make}
+cd py
+%py_build
+cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -120,7 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/sysconfig,%{systemdunitdir}}
 
 %{__make} install \
-        DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT
+
+cd py
+%py_install
+cd ..
 
 cp %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/nftables
 %{__sed} -i -e 's|@NFT@|%{_sbindir}/nft|' \
@@ -196,7 +203,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python-nftables
 %defattr(644,root,root,755)
-%dir %{py_sitedir}/nftables
-%{py_sitedir}/nftables/*.py[co]
-%{py_sitedir}/nftables/schema.json
-%{py_sitedir}/nftables-0.1-py*.egg-info
+%dir %{py_sitescriptdir}/nftables
+%{py_sitescriptdir}/nftables/*.py[co]
+%{py_sitescriptdir}/nftables/schema.json
+%{py_sitescriptdir}/nftables-0.1-py*.egg-info
