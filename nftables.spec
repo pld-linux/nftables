@@ -1,5 +1,6 @@
 #
 # Conditional build:
+%bcond_without	static_libs	# static library
 %bcond_without	systemd		# without systemd unit
 
 Summary:	Administration tool for packet filtering and classification
@@ -107,7 +108,7 @@ Wiązania Pythona do biblioteki libnftables.
 %{__automake}
 %configure \
 	--disable-silent-rules \
-	--enable-static \
+	%{__enable_disable static_libs static} \
 	--with-cli=readline \
 	--with-json \
 	--with-xtables
@@ -197,9 +198,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/libnftables.pc
 %{_mandir}/man3/libnftables.3*
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libnftables.a
+%endif
 
 %files -n python-nftables
 %defattr(644,root,root,755)
