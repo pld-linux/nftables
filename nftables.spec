@@ -1,5 +1,7 @@
 #
 # Conditional build:
+%bcond_without	python2		# CPython 2.x module
+%bcond_without	python3		# CPython 3.x module
 %bcond_without	static_libs	# static library
 %bcond_without	systemd		# without systemd unit
 
@@ -27,9 +29,16 @@ BuildRequires:	libmnl-devel >= 1.0.4
 BuildRequires:	libnftnl-devel >= 1.2.8
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
+%if %{with python2}
 BuildRequires:	python >= 1:2.5
 BuildRequires:	python-modules >= 1:2.5
 BuildRequires:	python-setuptools
+%endif
+%if %{with python3}
+BuildRequires:	python3 >= 1:3.2
+BuildRequires:	python3-modules >= 1:3.2
+BuildRequires:	python3-setuptools
+%endif
 BuildRequires:	readline-devel
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
@@ -85,17 +94,30 @@ Static nftables library.
 Statyczna biblioteka nftables.
 
 %package -n python-nftables
-Summary:	Python bindings for libnftables library
-Summary(pl.UTF-8):	Wiązania Pythona do biblioteki libnftables
+Summary:	Python 2 bindings for libnftables library
+Summary(pl.UTF-8):	Wiązania Pythona 2 do biblioteki libnftables
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
 
 %description -n python-nftables
-Python bindings for libnftables library.
+Python 2 bindings for libnftables library.
 
 %description -n python-nftables -l pl.UTF-8
-Wiązania Pythona do biblioteki libnftables.
+Wiązania Pythona 2 do biblioteki libnftables.
+
+%package -n python3-nftables
+Summary:	Python 3 bindings for libnftables library
+Summary(pl.UTF-8):	Wiązania Pythona 3 do biblioteki libnftables
+Group:		Libraries/Python
+Requires:	%{name} = %{version}-%{release}
+BuildArch:	noarch
+
+%description -n python3-nftables
+Python 3 bindings for libnftables library.
+
+%description -n python3-nftables -l pl.UTF-8
+Wiązania Pythona 3 do biblioteki libnftables.
 
 %prep
 %setup -q
@@ -114,20 +136,34 @@ Wiązania Pythona do biblioteki libnftables.
 	--with-xtables
 
 %{__make}
+
 cd py
+%if %{with python2}
 %py_build
+%endif
+
+%if %{with python3}
+%py3_build
+%endif
 cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT{/etc/sysconfig,%{systemdunitdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 cd py
+%if %{with python2}
 %py_install
+
+%py_postclean
+%endif
+
+%if %{with python3}
+%py3_install
+%endif
 cd ..
 
 cp %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/nftables
@@ -145,8 +181,6 @@ cp %{SOURCE1} $RPM_BUILD_ROOT%{systemdunitdir}
 
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libnftables.la
-
-%py_postclean
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -204,9 +238,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libnftables.a
 %endif
 
+%if %{with python2}
 %files -n python-nftables
 %defattr(644,root,root,755)
-%dir %{py_sitescriptdir}/nftables
-%{py_sitescriptdir}/nftables/*.py[co]
-%{py_sitescriptdir}/nftables/schema.json
+%{py_sitescriptdir}/nftables
 %{py_sitescriptdir}/nftables-0.1-py*.egg-info
+%endif
+
+%if %{with python3}
+%files -n python3-nftables
+%defattr(644,root,root,755)
+%{py3_sitescriptdir}/nftables
+%{py3_sitescriptdir}/nftables-0.1-py*.egg-info
+%endif
