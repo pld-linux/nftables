@@ -3,7 +3,7 @@
 %bcond_without	python2		# CPython 2.x module
 %bcond_without	python3		# CPython 3.x module
 %bcond_without	static_libs	# static library
-%bcond_without	systemd		# without systemd unit
+%bcond_without	systemd		# systemd unit
 
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
@@ -223,7 +223,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_docdir}/nftables
 %{_mandir}/man5/libnftables-json.5*
 %{_mandir}/man8/nft.8*
-%{?with_systemd:%{systemdunitdir}/%{name}.service}
+%if %{with systemd}
+%{systemdunitdir}/nftables.service
+%{_mandir}/man8/nftables.service.8*
+%endif
 
 %files devel
 %defattr(644,root,root,755)
