@@ -122,6 +122,10 @@ Wiązania Pythona 3 do biblioteki libnftables.
 %prep
 %setup -q
 
+%{__sed} -i -e \
+	's|/etc/nftables/rules/main.nft|/etc/sysconfig/nftables|' \
+	tools/nftables.service.8
+
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
