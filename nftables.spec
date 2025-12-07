@@ -8,14 +8,15 @@
 Summary:	Administration tool for packet filtering and classification
 Summary(pl.UTF-8):	Narzędzie administracyjne do filtrowania i klasyfikacji pakietów
 Name:		nftables
-Version:	1.1.5
+Version:	1.1.6
 Release:	1
 License:	GPL v2
 Group:		Applications/Networking
 Source0:	https://netfilter.org/projects/nftables/files/%{name}-%{version}.tar.xz
-# Source0-md5:	45fcdb9494181ef86bb71e9728845a0c
+# Source0-md5:	638ddff35ca429f68860a437d53237b4
 Source1:	%{name}.service
 Source2:	%{name}.conf
+Patch0:		bashism.patch
 URL:		https://netfilter.org/projects/nftables/
 BuildRequires:	asciidoc
 BuildRequires:	autoconf >= 2.61
@@ -26,7 +27,7 @@ BuildRequires:	gmp-devel
 BuildRequires:	iptables-devel >= 1.6.1
 BuildRequires:	jansson-devel
 BuildRequires:	libmnl-devel >= 1.0.4
-BuildRequires:	libnftnl-devel >= 1.3.0
+BuildRequires:	libnftnl-devel >= 1.3.1
 BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 %if %{with python2}
@@ -47,7 +48,7 @@ BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 Requires:	iptables-libs >= 1.6.1
 Requires:	libmnl >= 1.0.4
-Requires:	libnftnl >= 1.3.0
+Requires:	libnftnl >= 1.3.1
 %{?with_systemd:Requires:	systemd-units >= 38}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -121,10 +122,7 @@ Wiązania Pythona 3 do biblioteki libnftables.
 
 %prep
 %setup -q
-
-%{__sed} -i -e \
-	's|/etc/nftables/rules/main.nft|/etc/sysconfig/nftables|' \
-	tools/nftables.service.8
+%patch -P0 -p1
 
 %build
 %{__libtoolize}
@@ -229,7 +227,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/nft.8*
 %if %{with systemd}
 %{systemdunitdir}/nftables.service
-%{_mandir}/man8/nftables.service.8*
 %endif
 
 %files devel
